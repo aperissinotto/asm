@@ -24,15 +24,11 @@ section .text
 
 _start:
 	prtout txt1, ttxt1
-;	getin num1, tnum1
+	getin num1, tnum1
 	prtout txt2, ttxt2
-;	getin num2, tnum2
-	mov rax, 1
-	mov [num1], rax
-	mov rax, 2
-	mov [num2], rax
+	getin num2, tnum2
 	mov rax, [num1]
-	add rax, num2
+	add rax, [num2]
 	mov [num3], rax
 	inttoasc num3, work, twork
 	prtout work, twork
