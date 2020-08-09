@@ -6,28 +6,30 @@
 ;***********************************************************************************
 
 %macro asctoint 2
-	; prende i dati
+	; prende i parametri
 	mov r8, %1	; indirizzo del numero ascii
-	mov r9, %2
+	mov r9, %2      ; indirizzo del area di lavoro
 
 ; scopri l'ultimo byte ascii, quando = 0x0a
 	mov rbx, r8	; copia il indirizzo del numero per confrontare
-	mov rcx, 0
+	mov rcx, 0x00   ; pulire il register per usare la parte bassa
 
 _attlp01:
-	mov cl, [rbx]
-	inc rbx
-	cmp cl, 0x0a
-	jne _attlp01
+	mov cl, [rbx]   ; copia uno byte per confrontare per 0x0a
+	cmp cl, 0x0a    ; quando cl = 0x0a e fine della string
+	je _uttlp01     ; si, e finito
+	inc rbx         ; no, incrementa il indirizzo
+	j _attlp01      ; ritorna al loop
 
-	sub rbx, 2
-	mov rdx, 0
-	mov r10, 1
-	mov r11, 0
+_uttlp01:
+	dec rbx         ; diminuisce il indirizzo
+	mov rdx, 0x00   ; pulire il register per la moltiplicazione
+	mov r10, 0x01   ; il primo moltiplicatore
+	mov r11, 0x00   ; pulire il register per accumulare la somma
 
 _attlp02:
-	mov cl, [rbx]
-	sub cl, 0x30
+	mov cl, [rbx]   ; copia uno byte per diventare un intero
+	sub cl, 0x30    ; 
 	mov al, cl
 	mul r10
 	add r11,rax
@@ -39,5 +41,5 @@ _attlp02:
 	cmp rbx, r8
 	jnl _attlp02
 
-	mov [r9], r11d
+	mov [r9], r11
 %endmacro
