@@ -9,7 +9,7 @@ section .text
 	global _start
 
 _start:
-	prtstr text, ttext
+	prtout text, ttext
 
 	fim RC_OK
 
